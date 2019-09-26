@@ -59,7 +59,7 @@ var routes = function (app) {
         res.send(data.map(function (x) { return { id: x.id, data: x.data }; }));
     });
     app.get('/analyse', function (req, res) {
-        utils_1.analyseFolder(req.query.folder);
+        utils_1.analyseFolder('C:\\Users\\Chintu\\Music');
         res.send("Started");
     });
     app.get('/api/play', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {

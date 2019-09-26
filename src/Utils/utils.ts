@@ -5,8 +5,7 @@ let analyseFolder = (folderPath) => {
     console.log(folderPath)
     let acceptedFiles = ["mp3", "wav"];
     let ignoreFunc = (file, stats) => {
-        console.log(file);
-        
+        if (stats.isDirectory()) return false;
         return acceptedFiles.indexOf(file.split('.')[file.split('.').length - 1]) === -1;
     }
     let getData = (id, file, len) => {
@@ -18,10 +17,9 @@ let analyseFolder = (folderPath) => {
                     songsPic.push({id: id, picture: undefined});
                 }
                 delete metadata.common.picture;
-                console.log(metadata.format);
                 songsData.push({id: id, data: metadata.common, path: file, format: metadata.format.codec});
                 total += 1;
-                console.log(`${id} done of ${len}`);
+                console.log(`total: ${total}, ${id} done of ${len}`);
                 if (total === len) {
                     writeFileSync('songsData.json', JSON.stringify(songsData));
                     writeFileSync('songsPic.json', JSON.stringify(songsPic));
@@ -33,13 +31,24 @@ let analyseFolder = (folderPath) => {
     let total  = 0
     let songsData = [];
     let songsPic = [];
-    rr(folderPath, [ignoreFunc]).then(
-        files => {
-            const len = files.length;
-            for (let i in files) getData(i, files[i], len);
+    rr('/Users/Chintu/Music', [ignoreFunc]).then(
+        function (files) {
+            console.log(files.length);
+            // for (let i of files) {
+            //     recur(i, files.length);
+            // }
         },
-        err => console.log(err)
+        function (error) {
+            console.error("something exploded", error);
+        }
     );
+    // rr(folderPath, [ignoreFunc]).then(
+    //     files => {
+    //         const len = files.length;
+    //         for (let i in files) getData(i, files[i], len);
+    //     },
+    //     err => console.log(err)
+    // );
 
 }
 
