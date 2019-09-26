@@ -19,7 +19,8 @@ var analyseFolder = function (folderPath) {
                 songsPic.push({ id: id, picture: undefined });
             }
             delete metadata.common.picture;
-            songsData.push({ id: id, data: metadata.common });
+            console.log(metadata.format);
+            songsData.push({ id: id, data: metadata.common, path: file, format: metadata.format.codec });
             total += 1;
             console.log(id + " done of " + len);
             if (total === len) {
