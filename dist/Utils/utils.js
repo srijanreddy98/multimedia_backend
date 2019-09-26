@@ -13,6 +13,9 @@ var analyseFolder = function (folderPath) {
     };
     var getData = function (id, file, len) {
         mm.parseFile(file).then(function (metadata) {
+            if (!metadata.common.title) {
+                metadata.common.title = file.split('/').reverse()[0];
+            }
             if (metadata.common.picture) {
                 songsPic.push({ id: id, picture: metadata.common.picture });
             }
@@ -20,10 +23,12 @@ var analyseFolder = function (folderPath) {
                 songsPic.push({ id: id, picture: undefined });
             }
             delete metadata.common.picture;
-            songsData.push({ id: id, data: metadata.common, path: file, format: metadata.format.codec });
+            songsData.push({ id: id, data: metadata.common, path: file, format: file.split('.').reverse()[0] });
             total += 1;
             console.log("total: " + total + ", " + id + " done of " + len);
             if (total === len) {
+                console.log("Sorting");
+                songsData.sort(function (a, b) { return a.data.title > b.data.title ? 1 : -1; });
                 fs_1.writeFileSync('songsData.json', JSON.stringify(songsData));
                 fs_1.writeFileSync('songsPic.json', JSON.stringify(songsPic));
             }
@@ -32,11 +37,11 @@ var analyseFolder = function (folderPath) {
     var total = 0;
     var songsData = [];
     var songsPic = [];
-    rr('/Users/Chintu/Music', [ignoreFunc]).then(function (files) {
-        console.log(files.length);
-        // for (let i of files) {
-        //     recur(i, files.length);
-        // }
+    rr(folderPath, [ignoreFunc]).then(function (files) {
+        var len = files.length;
+        console.log(files[0]);
+        for (var i in files)
+            getData(i, files[i], len);
     }, function (error) {
         console.error("something exploded", error);
     });

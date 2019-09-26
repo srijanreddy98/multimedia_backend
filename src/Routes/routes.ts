@@ -12,7 +12,7 @@ let routes = (app) => {
     });
 
     app.get('/analyse', (req, res) => {
-        analyseFolder('C:\\Users\\Chintu\\Music');
+        analyseFolder('/Users/srijan/Desktop/Music');
         res.send("Started")
     });
     app.get('/api/play', async (req, res) => {

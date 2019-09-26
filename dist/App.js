@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
 var bodyParser = require("body-parser");
-// import * as path from 'path';
+var path = require("path");
 var App = /** @class */ (function () {
     function App() {
         this.app = express();
@@ -23,9 +23,9 @@ var App = /** @class */ (function () {
     };
     App.prototype.setRoutes = function (routes) {
         routes(this.app);
-        this.app.use(express.static(__dirname + '/frontend'));
+        this.app.use(express.static(__dirname + '/../frontend'));
         this.app.get('/*', function (req, res) {
-            // res.sendFile(path.join(__dirname + '/frontend', 'index.html'));
+            res.sendFile(path.join(__dirname + '/../frontend', 'index.html'));
         });
     };
     return App;
